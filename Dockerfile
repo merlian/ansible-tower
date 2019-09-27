@@ -1,40 +1,50 @@
-# Ansible Tower Dockerfie
+FROM ubuntu:xenial
 
-FROM ubuntu:14.04
+LABEL maintainer="huamaolin@qq.com"
 
-MAINTAINER huamaolin@qq.com
+WORKDIR /tmp/tower-installer
 
-ENV ANSIBLE_TOWER_VER 3.1.2
-ENV PG_DATA /var/lib/postgresql/9.4/main
+# update and install packages
+RUN apt-get update -y \
+    && apt-get install software-properties-common curl vim locales sudo apt-transport-https ca-certificates -y
 
-RUN apt-get install -y software-properties-common \
-    && apt-add-repository ppa:ansible/ansible \
-    && apt-get update \
-    && apt-get install -y ansible
+# install ansible
+RUN apt-add-repository ppa:ansible/ansible-2.8 \
+    && apt-get update -y \
+    && apt-get install ansible -y
 
-ADD http://releases.ansible.com/awx/setup/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz /opt/ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz
+# Set the locale
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
-RUN cd /opt && tar -xvf ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz \
-    && rm -rf ansible-tower-setup-${ANSIBLE_TOWER_VER}.tar.gz \
-    && mv ansible-tower-setup-${ANSIBLE_TOWER_VER} /opt/tower-setup
+# define tower version and PG_DATA
+ENV TOWER_VERSION 3.5.3-1
+ENV PG_DATA /var/lib/postgresql/9.6/main
 
+# download tower installer
+RUN curl -sSL http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-${TOWER_VERSION}.tar.gz -o ansible-tower-setup-${TOWER_VERSION}.tar.gz \
+    && tar xvf ansible-tower-setup-${TOWER_VERSION}.tar.gz \
+    && rm -f ansible-tower-setup-${TOWER_VERSION}.tar.gz
 
-ADD inventory /opt/tower-setup/inventory
+# change working dir
+WORKDIR /tmp/tower-installer/ansible-tower-setup-${TOWER_VERSION}
 
-RUN cd /opt/tower-setup \
-    && ./setup.sh
+# create var folder
+RUN mkdir /var/log/tower
 
-VOLUME ${PG_DATA}
-VOLUME /certs
+# copy inventory
+ADD inventory inventory
 
-ADD docker-entrypoint.sh /docker-entrypoint.sh
+# install tower
+RUN ./setup.sh
 
-RUN chmod +x /docker-entrypoint.sh
+# add entrypoint script
+ADD entrypoint.sh /entrypoint.sh
 
-EXPOSE 443 8080
+EXPOSE 80 443
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
-CMD ["ansible-tower"]
-
-
+# configure entrypoint
+ENTRYPOINT [ "/bin/bash", "-c" ]
+CMD [ "/entrypoint.sh" ]
