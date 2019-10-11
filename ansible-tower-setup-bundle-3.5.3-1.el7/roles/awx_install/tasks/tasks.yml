@@ -213,13 +213,13 @@
 #   retries: 10
 #   delay: 2
 
-- name: Migrate the Tower database schema (may take awhile when upgrading).
-  command: awx-manage migrate --noinput
-  become_user: '{{ aw_user }}'
-  become: True
-  register: tower_migrate
-  changed_when: "tower_migrate.stdout is defined and 'No migrations to apply' not in tower_migrate.stdout"
-  when: inventory_hostname == groups['tower'][0]
+# - name: Migrate the Tower database schema (may take awhile when upgrading).
+#   command: awx-manage migrate --noinput
+#   become_user: '{{ aw_user }}'
+#   become: True
+#   register: tower_migrate
+#   changed_when: "tower_migrate.stdout is defined and 'No migrations to apply' not in tower_migrate.stdout"
+#   when: inventory_hostname == groups['tower'][0]
 
 - name: Checking for RBAC migration log
   stat: path=/tmp/tower_rbac_migrations.log
@@ -261,30 +261,30 @@
   become: True
   with_items: "{{ configuration_files.stdout_lines }} + ['/etc/tower/settings.py']"
 
-- name: Check for Tower Super users
-  shell: echo "from django.contrib.auth.models import User; nsu = User.objects.filter(is_superuser=True).count(); exit(0 if nsu > 0 else 1)" | awx-manage shell
-  register: super_check
-  become_user: '{{ aw_user }}'
-  become: True
-  ignore_errors: yes
-  changed_when: super_check.rc > 0
-  when: inventory_hostname == groups['tower'][0]
+# - name: Check for Tower Super users
+#   shell: echo "from django.contrib.auth.models import User; nsu = User.objects.filter(is_superuser=True).count(); exit(0 if nsu > 0 else 1)" | awx-manage shell
+#   register: super_check
+#   become_user: '{{ aw_user }}'
+#   become: True
+#   ignore_errors: yes
+#   changed_when: super_check.rc > 0
+#   when: inventory_hostname == groups['tower'][0]
 
-- name: create django super user if it does not exist
-  shell: echo "from django.contrib.auth.models import User; User.objects.create_superuser('{{ admin_username }}', '{{ admin_email }}', '{{ awx_install_admin_password }}')" | awx-manage shell
-  become_user: '{{ aw_user }}'
-  become: True
-  no_log: True
-  when: inventory_hostname == groups['tower'][0] and super_check.rc > 0
+# - name: create django super user if it does not exist
+#   shell: echo "from django.contrib.auth.models import User; User.objects.create_superuser('{{ admin_username }}', '{{ admin_email }}', '{{ awx_install_admin_password }}')" | awx-manage shell
+#   become_user: '{{ aw_user }}'
+#   become: True
+#   no_log: True
+#   when: inventory_hostname == groups['tower'][0] and super_check.rc > 0
 
-- name: update django super user password
-  shell: awx-manage update_password --username='{{ admin_username }}' --password='{{ awx_install_admin_password }}'
-  become_user: '{{ aw_user }}'
-  become: True
-  no_log: True
-  register: result
-  changed_when: "'Password updated' in result.stdout"
-  when: awx_install_admin_password != '' and inventory_hostname == groups['tower'][0]
+# - name: update django super user password
+#   shell: awx-manage update_password --username='{{ admin_username }}' --password='{{ awx_install_admin_password }}'
+#   become_user: '{{ aw_user }}'
+#   become: True
+#   no_log: True
+#   register: result
+#   changed_when: "'Password updated' in result.stdout"
+#   when: awx_install_admin_password != '' and inventory_hostname == groups['tower'][0]
 
 - name: Collect static files for Tower.
   command: awx-manage collectstatic --noinput --clear -v0
