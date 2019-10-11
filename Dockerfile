@@ -29,7 +29,7 @@ RUN mkdir /var/log/tower
 ADD inventory inventory
 
 # install tower
-RUN ./setup.sh
+RUN ./setup.sh -e nginx_disable_https=true
 
 # add entrypoint script
 ADD entrypoint.sh /entrypoint.sh
