@@ -17,7 +17,7 @@ ENV PG_DATA /var/lib/postgresql/9.6/main
 # download tower installer
 RUN curl -sSL http://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-${TOWER_VERSION}.tar.gz -o ansible-tower-setup-${TOWER_VERSION}.tar.gz \
     && tar xvf ansible-tower-setup-bundle-${TOWER_VERSION}.tar.gz \
-    && rm -f ansible-tower-setup-${TOWER_VERSION}.tar.gz
+    && rm -f ansible-tower-setup-bundle-${TOWER_VERSION}.tar.gz
 
 # change working dir
 WORKDIR /tmp/tower-installer/ansible-tower-setup-bundle-${TOWER_VERSION}
