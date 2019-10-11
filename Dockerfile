@@ -10,12 +10,6 @@ RUN yum update -y \
     && pip3 install --upgrade pip \
     && pip install ansible
 
-# Set the locale
-RUN locale-gen en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-
 # define tower version and PG_DATA
 ENV TOWER_VERSION 3.5.3-1
 ENV PG_DATA /var/lib/postgresql/9.6/main
