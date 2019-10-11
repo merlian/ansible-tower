@@ -6,7 +6,7 @@ RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Cen
 
 # install ansible
 RUN yum update -y \
-    && install ansible -y
+    && yum install ansible -y
 
 
 WORKDIR /tmp/tower-installer
