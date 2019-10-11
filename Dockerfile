@@ -27,6 +27,8 @@ RUN mkdir /var/log/tower
 # copy inventory
 ADD inventory inventory
 
+ADD ansible-tower-setup-bundle-${TOWER_VERSION}/roles/awx_install/tasks/tasks.yml roles/awx_install/tasks/tasks.yml
+
 # install tower
 RUN ./setup.sh -e nginx_disable_https=true -- --skip-tags rabbitmq,postgresql_primary,postgresql_database,memcached
 
