@@ -1,17 +1,12 @@
-FROM ubuntu:xenial
+FROM centos:centos8
 
 LABEL maintainer="huamaolin@qq.com"
 
 WORKDIR /tmp/tower-installer
 
-# update and install packages
-RUN apt-get update -y \
-    && apt-get install software-properties-common curl vim locales sudo apt-transport-https ca-certificates -y
-
 # install ansible
-RUN apt-add-repository ppa:ansible/ansible-2.8 \
-    && apt-get update -y \
-    && apt-get install ansible -y
+RUN yum update -y \
+    && yum install ansible -y
 
 # Set the locale
 RUN locale-gen en_US.UTF-8
