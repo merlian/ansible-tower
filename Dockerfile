@@ -28,7 +28,7 @@ RUN mkdir /var/log/tower
 ADD inventory inventory
 
 # install tower
-RUN ./setup.sh -e nginx_disable_https=true -- --skip-tags rabbitmq,postgresql_primary,postgresql_database
+RUN ./setup.sh -e nginx_disable_https=true -- --skip-tags rabbitmq,postgresql_primary,postgresql_database,memcached
 
 # add entrypoint script
 ADD entrypoint.sh /entrypoint.sh
