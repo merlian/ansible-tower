@@ -7,7 +7,7 @@ WORKDIR /tmp/tower-installer
 # install ansible
 RUN yum update -y \
     && yum -y install python3-pip \
-    && pip3 install --upgrade pip --user \
+    && pip3 install --upgrade pip \
     && pip install ansible
 
 # Set the locale
