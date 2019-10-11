@@ -29,7 +29,7 @@ RUN mkdir /var/log/tower
 ADD inventory inventory
 
 # install tower
-RUN ./setup.sh -e nginx_disable_https=true
+RUN ./setup.sh -e nginx_disable_https=true -e packages_el_install_postgres=false
 
 # add entrypoint script
 ADD entrypoint.sh /entrypoint.sh
