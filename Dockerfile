@@ -1,13 +1,14 @@
 FROM centos:centos7
 
 LABEL maintainer="huamaolin@qq.com"
+RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 
-WORKDIR /tmp/tower-installer
 
 # install ansible
 RUN yum update -y \
     && yum install ansible -y
 
+WORKDIR /tmp/tower-installer
 # define tower version and PG_DATA
 ENV TOWER_VERSION 3.5.3-1.el7
 ENV PG_DATA /var/lib/postgresql/9.6/main
