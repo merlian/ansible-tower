@@ -11,16 +11,16 @@ RUN yum update -y \
     && pip install ansible
 
 # define tower version and PG_DATA
-ENV TOWER_VERSION 3.5.3-1
+ENV TOWER_VERSION 3.5.3-1.el8
 ENV PG_DATA /var/lib/postgresql/9.6/main
 
 # download tower installer
-RUN curl -sSL http://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-${TOWER_VERSION}.tar.gz -o ansible-tower-setup-${TOWER_VERSION}.tar.gz \
-    && tar xvf ansible-tower-setup-${TOWER_VERSION}.tar.gz \
+RUN curl -sSL http://releases.ansible.com/ansible-tower/setup-bundle/ansible-tower-setup-bundle-${TOWER_VERSION}.tar.gz -o ansible-tower-setup-${TOWER_VERSION}.tar.gz \
+    && tar xvf ansible-tower-setup-bundle-${TOWER_VERSION}.tar.gz \
     && rm -f ansible-tower-setup-${TOWER_VERSION}.tar.gz
 
 # change working dir
-WORKDIR /tmp/tower-installer/ansible-tower-setup-${TOWER_VERSION}
+WORKDIR /tmp/tower-installer/ansible-tower-setup-bundle-${TOWER_VERSION}
 
 # create var folder
 RUN mkdir /var/log/tower
