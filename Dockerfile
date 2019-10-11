@@ -1,11 +1,12 @@
-FROM vlisivka/docker-centos7-systemd-unpriv
+FROM centos:centos
 
 LABEL maintainer="huamaolin@qq.com"
 RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 
 
 # install ansible
-RUN yum install ansible -y
+RUN yum update -y \
+    && install ansible -y
 
 
 WORKDIR /tmp/tower-installer
