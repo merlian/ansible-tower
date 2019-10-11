@@ -1,4 +1,4 @@
-FROM centos:centos8
+FROM centos:centos7
 
 LABEL maintainer="huamaolin@qq.com"
 
@@ -6,12 +6,10 @@ WORKDIR /tmp/tower-installer
 
 # install ansible
 RUN yum update -y \
-    && yum -y install python3-pip \
-    && pip3 install --upgrade pip \
-    && pip install ansible
+    && yum install ansible -y
 
 # define tower version and PG_DATA
-ENV TOWER_VERSION 3.5.3-1.el8
+ENV TOWER_VERSION 3.5.3-1.el7
 ENV PG_DATA /var/lib/postgresql/9.6/main
 
 # download tower installer
